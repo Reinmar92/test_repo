@@ -29,7 +29,7 @@ class CounterBlock {
      _inCounter.add(_counter);
   }
 
-  void discpose() {
+  void dispose() {
     _counterStateController.close();
     _counterEventController.close();
   }
