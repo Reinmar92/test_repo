@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      bloc: _counterBloc,
+      builder: (BuildContext context)=>_counterBloc,
       child: CounterWidget(widget: widget),
     );
   }
@@ -83,13 +83,13 @@ class CounterWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            onPressed: ()=>_bloc.onIncrement(),
+            onPressed: ()=>BlocProvider.of<CounterBloc>(context).onIncrement(),
             tooltip: 'Increment',
             child: Icon(Icons.add),
           ),
           SizedBox(width: 10),
           FloatingActionButton(
-            onPressed:()=>_bloc.onDecrement(),
+            onPressed:()=>BlocProvider.of<CounterBloc>(context).onDecrement(),
             tooltip: 'Decrement',
             child: Icon(Icons.remove),
           ),
