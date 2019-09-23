@@ -3,6 +3,7 @@ import 'package:block_sample/bloc/weather_event.dart';
 import 'package:block_sample/model/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'bloc/weather_state.dart';
 
@@ -37,21 +38,17 @@ class _WeatherPageState extends State<WeatherPage> {
         title: Text("Fake Weather App"),
       ),
       body: BlocProvider(
-        builder: (context)=>weatherBloc,
+        builder: (context) => weatherBloc,
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 16),
           alignment: Alignment.center,
-          child: BlocListener (
-            bloc: weatherBloc,
-            listener: (context, WeatherState state)
-            {
+          child: BlocListener<WeatherBloc,WeatherState>(
+            listener: (context, WeatherState state) {
               if (state is WeatherLoaded) {
                 print("Loaded: ${state.weather.cityName}");
-                
               }
             },
-                      child: BlocBuilder(
-              bloc: weatherBloc,
+            child: BlocBuilder<WeatherBloc, WeatherState>(
               builder: (context, WeatherState state) {
                 if (state is WeatherInitial) {
                   return buildInitialInput();
