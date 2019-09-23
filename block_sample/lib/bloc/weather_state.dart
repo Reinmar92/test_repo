@@ -1,3 +1,4 @@
+import 'package:block_sample/model/weather.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -6,4 +7,12 @@ abstract class WeatherState extends Equatable {
   WeatherState([List props = const <dynamic>[]]) : super(props);
 }
 
-class InitialWeatherState extends WeatherState {}
+class WeatherInitial extends WeatherState {}
+
+class WeatherLoading extends WeatherState {}
+
+class WeatherLoaded extends WeatherState {
+  final Weather weather;
+
+  WeatherLoaded(this.weather): super([weather]);
+}
