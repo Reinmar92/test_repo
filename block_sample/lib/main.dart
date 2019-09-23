@@ -1,4 +1,10 @@
+import 'package:block_sample/bloc/weather_bloc.dart';
+import 'package:block_sample/model/weather.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/weather_state.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -22,6 +28,9 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
+
+  final weatherBloc = WeatherBloc();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,26 +40,41 @@ class _WeatherPageState extends State<WeatherPage> {
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(
-              "City Name",
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              "35 °C",
-              style: TextStyle(fontSize: 80),
-            ),
-            CityInputField(),
-          ],
+        child: BlocBuilder(
+          bloc: weatherBloc,
+          builder: (context, WeatherState state) {
+            return Container();
+          },
         ),
       ),
     );
   }
+
+  Column buildColumnWithData(Weather weather) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text(
+            "City Name",
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            "35 °C",
+            style: TextStyle(fontSize: 80),
+          ),
+          CityInputField(),
+        ],
+      );
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    weatherBloc.dispose();
+  }
+
 }
 
 class CityInputField extends StatefulWidget {
