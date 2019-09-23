@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "801103629043",
+    "firebase_url": "https://sms-login-test.firebaseio.com",
+    "project_id": "sms-login-test",
+    "storage_bucket": "sms-login-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801103629043:android:717b74fab9f2727d48c586",
+        "android_client_info": {
+          "package_name": "com.example.test_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "801103629043-aidoe4n28t545q5jlu6hkf6smsmg0rgb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKGlebh27BqUdMrlqvq0XDKAxgsyDnuzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "801103629043-aidoe4n28t545q5jlu6hkf6smsmg0rgb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
