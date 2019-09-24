@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -10,9 +12,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  
+  var currentLocation = LocationData;
+  var location = new Location();
+
   GoogleMapController mapController;
 
   static const LatLng _center = const LatLng(45.521563, -122.677433);
+    
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -46,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+
     this.uid = '';
     FirebaseAuth.instance.currentUser().then((val) {
       setState(() {
@@ -83,6 +91,8 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         children: <Widget>[
           GoogleMap(
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: _center,
