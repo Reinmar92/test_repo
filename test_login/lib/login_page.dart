@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LoginPage  extends StatefulWidget {
   const LoginPage ({Key key}) : super(key: key);
@@ -9,7 +10,15 @@ class LoginPage  extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  GoogleMapController mapController;
 
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+  
+ //sms auth controlling
   String uid='';
   getUid(){}
 
@@ -30,7 +39,22 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text ("Login Page"),
+        title: new Text ("Login Map Page"),
+        actions: <Widget>[
+          FlatButton(
+            color: Colors.blue,
+            textColor: Colors.white,
+                child: Text('Wyloguj', style: TextStyle(fontSize: 20),),
+                onPressed: (){
+                  FirebaseAuth.instance.signOut().then((action){
+                    Navigator.of(context).pushReplacementNamed('/landingpage');
+                  }).catchError((e){
+                    print(e);
+                  });
+                },
+              ),
+
+        ],
         
       ),
       body: Center(
@@ -41,17 +65,13 @@ class _LoginPageState extends State<LoginPage> {
               new Text('Zalogowano użytkownika $uid'),
               SizedBox(height: 15.0,
               ),
-              new OutlineButton(
-                borderSide: BorderSide(color: Colors.red, style: BorderStyle.solid, width: 3.0),
-                child: Text('Wyloguj'),
-                onPressed: (){
-                  FirebaseAuth.instance.signOut().then((action){
-                    Navigator.of(context).pushReplacementNamed('/landingpage');
-                  }).catchError((e){
-                    print(e);
-                  });
-                },
-              )
+              GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 11.0,
+          ),
+              ),
             ],
           ),
         ),),
