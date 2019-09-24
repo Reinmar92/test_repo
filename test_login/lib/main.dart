@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
               TextField(
                 decoration: InputDecoration(hintText: 'Podaj numer telefonu'),
                  onChanged: (value){
-                   this.phoneNmbr=value;
+                   this.phoneNmbr='+48'+value;
                 },
                 ),
                 SizedBox(height: 10.0),
