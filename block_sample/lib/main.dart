@@ -3,7 +3,6 @@ import 'package:block_sample/bloc/weather_event.dart';
 import 'package:block_sample/model/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 import 'bloc/weather_state.dart';
 
