@@ -44,11 +44,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     super.initState();
     animationController=new AnimationController(
       vsync: this,
-      duration: new Duration(milliseconds: 500),
+      duration: new Duration(milliseconds: 800),
     );
     animationControllerSecond= new AnimationController(
       vsync: this,
-      duration: new Duration(milliseconds: 500)
+      duration: new Duration(milliseconds: 800)
     );
 
    // animationController.forward();
