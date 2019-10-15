@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:yes_or_no/views/yes_screen.dart';
 import 'package:yes_or_no/views/no_screen.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,50 +36,51 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
-    AnimationController animationController, animationControllerSecond;
-    
-   
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  AnimationController animationController, animationControllerSecond;
+
+  
+
+
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    animationController=new AnimationController(
+    animationController = new AnimationController(
       vsync: this,
       duration: new Duration(milliseconds: 800),
     );
-    animationControllerSecond= new AnimationController(
-      vsync: this,
-      duration: new Duration(milliseconds: 800)
-    );
+    animationControllerSecond = new AnimationController(
+        vsync: this, duration: new Duration(milliseconds: 800));
 
-   // animationController.forward();
-    animationController.addListener((){
+    // animationController.forward();
+    animationController.addListener(() {
       setState(() {
-        if (animationController.status==AnimationStatus.completed) {
+        if (animationController.status == AnimationStatus.completed) {
           animationController.repeat();
-        } 
+        }
       });
     });
 
-    animationControllerSecond.addListener((){
-      setState((){
-        if (animationControllerSecond.status==AnimationStatus.completed) {
+    animationControllerSecond.addListener(() {
+      setState(() {
+        if (animationControllerSecond.status == AnimationStatus.completed) {
           animationControllerSecond.repeat();
         }
       });
-
     });
-    
+
+
+
   }
-  
+
   void yesOrNo() {
     setState(() {
       animationController.forward();
-      Timer(Duration(milliseconds: 1000),(){
+      Timer(Duration(milliseconds: 1000), () {
         animationControllerSecond.forward();
       });
-      Timer(Duration(seconds: 10),(){
+      Timer(Duration(seconds: 10), () {
         animationController.stop();
         var rng = new Random();
         if (rng.nextInt(10) <= 5) {
@@ -86,22 +89,29 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
           Navigator.of(context).pushReplacementNamed('/nopage');
         }
       });
-        
-      
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+
+    if (Platform.isAndroid) {
+       FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-8347410643233932~5895169796').then((response){
+        myBanner..load()..show();
+    });
+    }
+    if(Platform.isIOS){
+    FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-8347410643233932~9297328379').then((response){
+        myBanner..load()..show();
+    });
+    }
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/yesno.png'),
-            fit: BoxFit.cover
-          )
-        ),
+            image: DecorationImage(
+                image: AssetImage('assets/images/yesno.png'),
+                fit: BoxFit.cover)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -109,7 +119,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    
                     FadeTransition(
                       opacity: animationController,
                       child: Container(
@@ -123,15 +132,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
                       ),
                     ),
                     FadeTransition(
-                      opacity: animationControllerSecond,              
-                                          child: Container(
+                      opacity: animationControllerSecond,
+                      child: Container(
                         height: MediaQuery.of(context).size.height / 2,
                         width: MediaQuery.of(context).size.width,
                         child: Image.asset(
                           'assets/images/blank_no.png',
                           fit: BoxFit.cover,
                           alignment: Alignment.center,
-                          
                         ),
                       ),
                     ),
@@ -163,12 +171,35 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
         ),
       ),
     );
-    
   }
+
+ static MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+  keywords: <String>['games', 'courses'],
+  contentUrl: 'https://flutter.io',
+  birthday: DateTime.now(),
+  childDirected: false,
+  designedForFamilies: false,
+  gender: MobileAdGender.male, // or MobileAdGender.female, MobileAdGender.unknown
+  testDevices: <String>[], // Android emulators are considered test devices
+);
+
+BannerAd myBanner = BannerAd(
+  // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+  // https://developers.google.com/admob/android/test-ads
+  // https://developers.google.com/admob/ios/test-ads
+  adUnitId: BannerAd.testAdUnitId,
+  size: AdSize.smartBanner,
+  targetingInfo: targetingInfo,
+  listener: (MobileAdEvent event) {
+    print("BannerAd event is $event");
+  },
+);
+
   @override
-    void dispose() {
+  void dispose() {
     animationController.dispose();
     animationControllerSecond.dispose();
+    myBanner.dispose();
     super.dispose();
   }
 }

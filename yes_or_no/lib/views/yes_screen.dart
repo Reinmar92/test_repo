@@ -1,5 +1,6 @@
+import 'dart:io';
 import 'dart:math';
-
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
 class YesScreen extends StatefulWidget {
@@ -12,9 +13,12 @@ class _YesScreenState extends State<YesScreen> with TickerProviderStateMixin{
 
   AnimationController animationController;
 
+  
+
   @override
   void initState() { 
     super.initState();
+
     animationController=new AnimationController(
       vsync: this,
       duration: new Duration(milliseconds: 5000),
@@ -30,11 +34,26 @@ class _YesScreenState extends State<YesScreen> with TickerProviderStateMixin{
       });
     });
     
+    
   }
 
 
   @override
   Widget build(BuildContext context) {
+
+
+     if (Platform.isAndroid) {
+       FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-8347410643233932~5895169796').then((response){
+        
+    });
+    }
+    if(Platform.isIOS){
+    FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-8347410643233932~9297328379').then((response){
+        
+    });
+    }
+
+
     return Scaffold(
       
       backgroundColor: Colors.green[900],
@@ -72,6 +91,7 @@ class _YesScreenState extends State<YesScreen> with TickerProviderStateMixin{
                     child: Image.asset('assets/images/yes_button.png'),
                     onPressed: () {
                       setState(() {
+                        myInterstitial..load()..show();
                         Navigator.of(context).pushReplacementNamed('/homepage');
                       });
                     }),
@@ -83,9 +103,33 @@ class _YesScreenState extends State<YesScreen> with TickerProviderStateMixin{
       ),
     );
   }
+ static MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+  keywords: <String>['flutterio', 'beautiful apps'],
+  contentUrl: 'https://flutter.io',
+  birthday: DateTime.now(),
+  childDirected: false,
+  designedForFamilies: false,
+  gender: MobileAdGender.male, // or MobileAdGender.female, MobileAdGender.unknown
+  testDevices: <String>[], // Android emulators are considered test devices
+);
+
+InterstitialAd myInterstitial = InterstitialAd(
+  // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+  // https://developers.google.com/admob/android/test-ads
+  // https://developers.google.com/admob/ios/test-ads
+  adUnitId: InterstitialAd.testAdUnitId,
+  targetingInfo: targetingInfo,
+  listener: (MobileAdEvent event) {
+    print("InterstitialAd event is $event");
+  },
+);
+
+
+
   @override
     void dispose() {
     animationController.dispose();
+    myInterstitial.dispose();
     super.dispose();
   }
 }
