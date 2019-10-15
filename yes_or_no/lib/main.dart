@@ -39,6 +39,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   AnimationController animationController, animationControllerSecond;
 
+  bool _isButtonTapped = false;
+
+  _onTapped() {
+    setState(() => _isButtonTapped =
+        !_isButtonTapped); //tapping the button once, disables the button from being tapped again
+  }
   
 
 
@@ -155,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   left: MediaQuery.of(context).size.width / 4,
                   right: MediaQuery.of(context).size.width / 4,
                   child: FlatButton(
-                    onPressed: yesOrNo,
+                    onPressed: _isButtonTapped ? yesOrNo : _onTapped,
                     child: Image.asset('assets/images/spin.png'),
                   ),
                 ),
