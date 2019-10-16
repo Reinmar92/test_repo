@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 class NoScreen extends StatefulWidget {
   NoScreen({Key key}) : super(key: key);
@@ -11,27 +11,12 @@ class NoScreen extends StatefulWidget {
 }
 
 class _NoScreenState extends State<NoScreen> with TickerProviderStateMixin{
-
-  AnimationController animationController;
+  String animationName = 'Rotation';
 
   @override
   void initState() { 
     super.initState();
-    animationController=new AnimationController(
-      vsync: this,
-      duration: new Duration(milliseconds: 5000),
-      upperBound: pi*2,
-    );
-    animationController.forward();
-    animationController.addListener((){
-      setState(() {
-        if (animationController.status==AnimationStatus.completed) {
-          animationController.repeat();
-          
-        } 
-      });
-    });
-    
+
   }
 
   @override
@@ -47,53 +32,36 @@ class _NoScreenState extends State<NoScreen> with TickerProviderStateMixin{
     });
     }
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.red[900],
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-           Stack(
-              children: <Widget>[
-                ClipOval(
-                                  child: Container(
-                    child: new AnimatedBuilder(
-                      animation: animationController,
-                      child: Container(
-                        width: 1000.0,
-                        height: 500.0,
-                        child: Image.asset('assets/images/sun.png')
-                      ),
-                      builder: (BuildContext context, Widget _widget) {
-                        return  new Transform.rotate(
-                          angle: animationController.value,
-                          child: _widget,
-                        );
-                      },
+           body: SafeArea(
+                        child: Stack(
+                children: <Widget>[
+                  
+                   FlareActor(
+                      'assets/animations/NoAnimation.flr',
+                      fit: BoxFit.none,
+                      animation: animationName,
                     ),
-                    
+                  Positioned(
+                    left: MediaQuery.of(context).size.width / 4,
+                    right: MediaQuery.of(context).size.width / 4,
+                    top: MediaQuery.of(context).size.height / 4,
+                    bottom: MediaQuery.of(context).size.height / 4,
+                    child: FlatButton(
+                        child: Image.asset('assets/images/no_button.png'),
+                        onPressed: () {
+                          setState(() {
+                            myInterstitial
+                              ..load()
+                              ..show();
+                            Navigator.of(context)
+                                .pushReplacementNamed('/homepage');
+                          });
+                        }),
                   ),
-                ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width/4,
-                  right: MediaQuery.of(context).size.width/4,
-                  top: MediaQuery.of(context).size.height/4,
-                  bottom: MediaQuery.of(context).size.height/4,
-                                  child: FlatButton(
-                    child: Image.asset('assets/images/no_button.png'),
-                    onPressed: () {
-                      setState(() {
-                        myInterstitial..load()..show();
-                        Navigator.of(context).pushReplacementNamed('/homepage');
-                      });
-                    }),
-                ),
-              ],
-            ),
-          ],
-          
-        ),
-      ),
+                ],
+              ),
+           ),
     );
   }
 static MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
@@ -120,7 +88,6 @@ InterstitialAd myInterstitial = InterstitialAd(
 
   @override
     void dispose() {
-    animationController.dispose();
     myInterstitial.dispose();
     super.dispose();
   }

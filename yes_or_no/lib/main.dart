@@ -39,13 +39,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   AnimationController animationController, animationControllerSecond;
 
-  bool _isButtonTapped = false;
-
-  _onTapped() {
-    setState(() => _isButtonTapped =
-        !_isButtonTapped); //tapping the button once, disables the button from being tapped again
-  }
-  
+ 
 
 
 
@@ -54,16 +48,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.initState();
     animationController = new AnimationController(
       vsync: this,
-      duration: new Duration(milliseconds: 800),
+      duration: new Duration(milliseconds: 500),
     );
     animationControllerSecond = new AnimationController(
-        vsync: this, duration: new Duration(milliseconds: 800));
+        vsync: this, duration: new Duration(milliseconds: 500));
 
-    // animationController.forward();
     animationController.addListener(() {
       setState(() {
         if (animationController.status == AnimationStatus.completed) {
-          animationController.repeat();
+
+          animationControllerSecond.forward();
+          animationController.reverse();
+          
         }
       });
     });
@@ -71,7 +67,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     animationControllerSecond.addListener(() {
       setState(() {
         if (animationControllerSecond.status == AnimationStatus.completed) {
-          animationControllerSecond.repeat();
+          animationController.forward();
+          animationControllerSecond.reverse();
+          
         }
       });
     });
@@ -83,15 +81,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void yesOrNo() {
     setState(() {
       animationController.forward();
-      Timer(Duration(milliseconds: 1000), () {
-        animationControllerSecond.forward();
-      });
-      Timer(Duration(seconds: 10), () {
+      Timer(Duration(seconds: 2), () {
         animationController.stop();
-        var rng = new Random();
-        if (rng.nextInt(10) <= 5) {
+        animationControllerSecond.stop();
+        Random rnd;
+        int min = 1;
+       int max = 10;
+        rnd = new Random();
+        int r = min + rnd.nextInt(max - min);
+        print(r);
+        if (r <= 5) {
+          
           Navigator.of(context).pushReplacementNamed('/yespage');
-        } else if (rng.nextInt(10) >= 5) {
+        } else if (r > 5) {
+          
           Navigator.of(context).pushReplacementNamed('/nopage');
         }
       });
@@ -161,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   left: MediaQuery.of(context).size.width / 4,
                   right: MediaQuery.of(context).size.width / 4,
                   child: FlatButton(
-                    onPressed: _isButtonTapped ? yesOrNo : _onTapped,
+                    onPressed: yesOrNo,
                     child: Image.asset('assets/images/spin.png'),
                   ),
                 ),
