@@ -1,34 +1,21 @@
+import 'package:bottle_game/bottles.dart';
 import 'package:bottle_game/main.dart';
 import 'package:bottle_game/model/bottle.dart';
 import 'package:flutter/material.dart';
 
 class CustomizeBottle extends StatefulWidget {
-  CustomizeBottle({Key key}) : super(key: key);
+  Bottles bottles;
+  CustomizeBottle(this.bottles);
 
   _CustomizeBottleState createState() => _CustomizeBottleState();
 }
 
 class _CustomizeBottleState extends State<CustomizeBottle> {
-  static List<Bottle> bottles = [
-    Bottle(
-        id: 1,
-        name: 'Soda',
-        btnImage: 'assets/images/buttons/001-sodabottle.png',
-        bottleImage: 'assets/images/bottles/sodabottle.png'),
-    Bottle(
-        id: 2,
-        name: 'Glass',
-        btnImage: 'assets/images/buttons/002-glassbottle.png',
-        bottleImage: 'assets/images/bottles/glassbottle.png'),
-    Bottle(
-        id: 3,
-        name: 'Water',
-        btnImage: 'assets/images/buttons/003-waterbottle.png',
-        bottleImage: 'assets/images/bottles/waterbottle.png'),
-  ];
+  Bottles bottles;
 
   @override
   void initState() {
+    bottles = widget.bottles;
     super.initState();
   }
 
@@ -59,31 +46,40 @@ class _CustomizeBottleState extends State<CustomizeBottle> {
                   children: <Widget>[
                     RaisedButton(
                       onPressed: () {
+                        bottles.selectBottle(bottles.getBottles()[0]);
                         Navigator.push(context, MaterialPageRoute(
-                          builder: (context)=>MyHomePage(
-                            bottle: bottles[0],
-                          )
+                          builder: (context)=>MyHomePage()
                         ));
-                        print(bottles[0].bottleImage);
+                        //print(bottles[0].bottleImage);
                       },
                       child: Container(
                           height: 100.0,
                           width: 50.0,
-                          child: Image.asset(bottles[0].btnImage)),
+                          child: Image.asset(bottles.getBottles()[0].btnImage)),
                     ),
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        bottles.selectBottle(bottles.getBottles()[1]);
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context)=>MyHomePage()
+                        ));
+                      },
                       child: Container(
                           height: 100.0,
                           width: 50.0,
-                          child: Image.asset(bottles[1].btnImage)),
+                          child: Image.asset(bottles.getBottles()[1].btnImage)),
                     ),
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        bottles.selectBottle(bottles.getBottles()[2]);
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context)=>MyHomePage()
+                        ));
+                      },
                       child: Container(
                           height: 100.0,
                           width: 50.0,
-                          child: Image.asset(bottles[2].btnImage)),
+                          child: Image.asset(bottles.getBottles()[2].btnImage)),
                     )
                   ],
                 ),
